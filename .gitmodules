@@ -1,2 +1,5 @@
 [submodule "kenan"]
 	branch = kenan
+[submodule "redflat"]
+	url = https://github.com/kenanpelit/redflat.git
+	branch = kenan
