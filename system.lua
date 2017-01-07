@@ -344,42 +344,44 @@ end
 function system.thermal.hddtemp(args)
 	local args = args or {}
 	local port = args.port or "7634"
-	local disk = args.disk or "/dev/sda"
+	local disk = args.disk or "localhost"
 
-	local output = awful.util.pread(
-		"echo | curl --connect-timeout 1 -fsm 3 telnet://127.0.0.1:" .. port .. " | grep " .. disk
-	)
+	--local output = awful.util.pread(
+		--"echo | curl --connect-timeout 1 -fsm 3 telnet://127.0.0.1:" .. port .. " | grep " .. disk
+    --"nc localhost" .. disk .. port .. " | cut -c54-55 "
+	--)
 	local temp = string.match(output, "|(%d+)|[CF]|")
+	local temp = 35
 
 	return temp and { tonumber(temp) } or { 0 }
 end
 
 -- Using nvidia-settings on sysmem with optimus (bumblebee)
 ------------------------------------------------------------
-function system.thermal.nvoptimus()
-	local temp = 0
-	local nvidia_on = string.find(awful.util.pread("cat /proc/acpi/bbswitch"), "ON")
+--function system.thermal.nvoptimus()
+--	local temp = 0
+--	local nvidia_on = string.find(awful.util.pread("cat /proc/acpi/bbswitch"), "ON")
 
-	if nvidia_on ~= nil then
-		temp = string.match(awful.util.pread("optirun -b none nvidia-settings -c :8 -q gpucoretemp -t"), "[^\n]+")
-	end
+--	if nvidia_on ~= nil then
+--		temp = string.match(awful.util.pread("optirun -b none nvidia-settings -c :8 -q gpucoretemp -t"), "[^\n]+")
+--	end
 
-	return { tonumber(temp), off = nvidia_on == nil }
-end
+--	return { tonumber(temp), off = nvidia_on == nil }
+--end
 
 -- Using nvidia-smi on sysmem with optimus (nvidia-prime)
 ------------------------------------------------------------
-function system.thermal.nvprime()
-	local temp = 0
-	local nvidia_on = string.find(awful.util.pread("prime-select query"), "nvidia")
+--function system.thermal.nvprime()
+--	local temp = 0
+--	local nvidia_on = string.find(awful.util.pread("prime-select query"), "nvidia")
 
-	if nvidia_on ~= nil then
-		t = string.match(awful.util.pread("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader"), "%d%d")
-		if t then temp = t end
-	end
+--	if nvidia_on ~= nil then
+--		t = string.match(awful.util.pread("nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader"), "%d%d")
+--		if t then temp = t end
+--	end
 
-	return { tonumber(temp), off = nvidia_on == nil }
-end
+--	return { tonumber(temp), off = nvidia_on == nil }
+--end
 
 -- Get info from transmission-remote client
 -- This function adapted special for asyncshell
@@ -388,7 +390,7 @@ end
 -- Check if transmission client running
 --------------------------------------------------------------------------------
 local function is_transmission_running(args)
-	local t_client = args or "transmission-gtk"
+	local t_client = args or "transmission-daemon"
 	return awful.util.pread("pidof -x " .. t_client) ~= ""
 end
 

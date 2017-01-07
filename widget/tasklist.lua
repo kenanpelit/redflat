@@ -575,7 +575,7 @@ function redtasklist.tasktip:init(buttons, style)
 	self.hidetimer:connect_signal("timeout",
 		function()
 			self.wibox.visible = false
-			self.hidetimer:stop()
+			--self.hidetimer:stop()
 		end
 	)
 	self.hidetimer:emit_signal("timeout")

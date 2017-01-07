@@ -43,16 +43,16 @@ mail.check_function["script"] = function(args)
 	return args.script
 end
 
-mail.check_function["curl_imap"] = function(args)
-	local port = args.port or 993
-	local request = "-X 'SEARCH (UNSEEN)'"
-	local head_command = "curl --connect-timeout 5 -fsm 5"
+--mail.check_function["curl_imap"] = function(args)
+--	local port = args.port or 993
+--	local request = "-X 'SEARCH (UNSEEN)'"
+--	local head_command = "curl --connect-timeout 5 -fsm 5"
 
-	curl_req = string.format("%s --url imaps://%s:%s/INBOX -u %s:%q %s -k | awk '{print $NF} ' | tr -dc '0-9'",
-	                         head_command, args.server, port, args.mail, args.password, request)
+--	curl_req = string.format("%s --url imaps://%s:%s/INBOX -u %s:%q %s -k | awk '{print $NF} ' | tr -dc '0-9'",
+--	                         head_command, args.server, port, args.mail, args.password, request)
 
-	return curl_req
-end
+--	return curl_req
+--end
 -- Create a new mail widget
 -- @param style Table containing colors and geometry parameters for all elemets
 -- @param args.update_timeout Update interval
